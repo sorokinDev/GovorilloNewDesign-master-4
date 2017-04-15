@@ -301,7 +301,7 @@ public class BotTalking extends AppCompatActivity
                 URL url = new URL("http://www.botlibre.com/rest/botlibre/form-chat?instance=11736722&message=\""+s+"\"&application=8499830136648224440");
                 HttpURLConnection connection = (HttpURLConnection) url.openConnection();
                 connection.setRequestMethod("POST");
-                connection.setRequestProperty("USER-AGENT", "Mozilla/5.0");
+                connection.setRequestProperty("USER-AGENT", "Mozilla/4.0"); /////
                 connection.setRequestProperty("ACCEPT-LANGUAGE", "en-US,en;0.5");
                 connection.setDoOutput(true);
                 DataOutputStream dStream = new DataOutputStream(connection.getOutputStream());
