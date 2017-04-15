@@ -1,6 +1,7 @@
 package com.vsquad.projects.govorillo;
 
 import android.annotation.TargetApi;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -62,7 +63,7 @@ import static android.content.pm.PackageManager.PERMISSION_GRANTED;
 public class FastTexts extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
-
+    private ProgressDialog progress;
     private static final int MY_PERMISSIONS_REQUEST_RECORD_AUDIO = 1;
     private int errors_in_text = 0;
     private int xp = 0;
@@ -169,6 +170,7 @@ public class FastTexts extends AppCompatActivity
         public void onRecognitionDone(Recognizer recognizer, Recognition recognition) {
             mStreamId = VEnd.play(mSoundId, leftVolume, rightVolume, priority, no_loop, normal_playback_rate);
             FastTexts.this.onRecognitionDone(recognizer, recognition);
+            progress.dismiss();
         }
 
         @Override
@@ -244,6 +246,9 @@ public class FastTexts extends AppCompatActivity
             MainBtn.setImageResource(R.drawable.mainmicro);
             isrunning = false;
             recognizer.finishRecording();
+            progress = new ProgressDialog(this);
+            progress.setMessage("Распознавание речи...");
+            progress.show();
         } else {
             if (whatButton == 1) {
                 seconds = 0;
@@ -370,7 +375,6 @@ public class FastTexts extends AppCompatActivity
     }
 
     public void onRecognitionDone(Recognizer recognizer, Recognition results) {
-
         s = results.getBestResultText().toLowerCase();
 
         mas = s.split(" ");

@@ -45,6 +45,7 @@ dependencies {
     compile 'com.android.support.constraint:constraint-layout:+'
     testCompile 'junit:junit:4.12'
     compile 'net.java.dev.jna:jna:4.0.0'
+    compile 'com.squareup.okhttp3:okhttp:3.5.0'
 }
 
 

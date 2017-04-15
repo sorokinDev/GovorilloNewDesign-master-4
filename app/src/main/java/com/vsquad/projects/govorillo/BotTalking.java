@@ -6,6 +6,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.media.AudioManager;
 import android.media.SoundPool;
 import android.os.AsyncTask;
@@ -13,6 +15,8 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.ActionBarDrawerToggle;
+import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -33,7 +37,11 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.URLEncoder;
 
+import okhttp3.HttpUrl;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
 import ru.yandex.speechkit.Error;
 import ru.yandex.speechkit.Recognition;
 import ru.yandex.speechkit.Recognizer;
@@ -153,9 +161,7 @@ public class BotTalking extends AppCompatActivity
         public void onRecognitionDone(Recognizer recognizer, Recognition recognition)  {
             //mStreamId = VEnd.play(mSoundId, leftVolume, rightVolume, priority, no_loop, normal_playback_rate);
 
-            progress = new ProgressDialog(BotTalking.this);
-            progress.setMessage("Загрузка");
-            progress.show();
+            progress.setMessage("Загрузка ответа");
 
 
             try {
@@ -177,7 +183,7 @@ public class BotTalking extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.content_bot_talking);
+        setContentView(R.layout.activity_bot_talking);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -185,6 +191,16 @@ public class BotTalking extends AppCompatActivity
         //      new SDKConnection(new BOTlibreCredential("8499830136648224440"));
         MainButton = (ImageView) findViewById(R.id.mainbtn);
         chat = (TextView) findViewById(R.id.chat);
+
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawer.setDrawerListener(toggle);
+        toggle.syncState();
+
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
+        toolbar.getNavigationIcon().setColorFilter(Color.BLACK, PorterDuff.Mode.SRC_ATOP);
 
         final Bundle bundle = getIntent().getExtras();
         if (bundle != null) {
@@ -210,6 +226,9 @@ public class BotTalking extends AppCompatActivity
             MainButton.setImageResource(R.drawable.mainmicro);
             isrunning = false;
             recognizer.finishRecording();
+            progress = new ProgressDialog(BotTalking.this);
+            progress.setMessage("Распознавание речи...");
+            progress.show();
         } else {
             if (whatButton == 1) {
                 seconds = 0;
@@ -282,9 +301,7 @@ public class BotTalking extends AppCompatActivity
 */
         // ОТВЕЧАТЬ
 
-        chat.append("\nBot: "+bot_answer);
-        Vocalizer vocalizer = createVocalizer(Vocalizer.Language.RUSSIAN,bot_answer,false,Vocalizer.Voice.JANE);
-        vocalizer.play();
+
 
     }
 
@@ -297,49 +314,20 @@ public class BotTalking extends AppCompatActivity
 
         @Override
         protected Void doInBackground(String... params) {
+            String xml = null;
             try {
-                URL url = new URL("http://www.botlibre.com/rest/botlibre/form-chat?instance=11736722&message=\""+s+"\"&application=8499830136648224440");
-                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-                connection.setRequestMethod("POST");
-                connection.setRequestProperty("USER-AGENT", "Mozilla/4.0"); /////
-                connection.setRequestProperty("ACCEPT-LANGUAGE", "en-US,en;0.5");
-                connection.setDoOutput(true);
-                DataOutputStream dStream = new DataOutputStream(connection.getOutputStream());
-                dStream.flush();
-                dStream.close();
-                BufferedReader br = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-                String line = "";
-                while ((line = br.readLine()) != null) {
-                    String[] mas = line.split("");
-                    StringBuilder sb = new StringBuilder();
-                    StringBuilder textBody = new StringBuilder();
+                HttpUrl.Builder urlBuilder = HttpUrl.parse("https://www.botlibre.com/rest/api/form-chat?instance=11736722&application=8499830136648224440").newBuilder().addQueryParameter("message", s.trim());
 
-                    for (int i = 0; i < line.length(); i++) {
-                        sb.append(mas[i]);
+                String url = urlBuilder.build().toString();
 
-                        if (sb.toString().endsWith("<message>")) {
-                            i++;
-                            for (int i1 = 0; i1 < 100000; i++) {
-                                if (mas[i].startsWith("<")) {
+                Request request = new Request.Builder()
+                        .url(url)
+                        .build();
+                OkHttpClient client = new OkHttpClient();
+                String respXml = client.newCall(request).execute().body().string();
+                Log.d("mylog", respXml.substring(respXml.indexOf("<message>")+9, respXml.indexOf("</message>")));
+                bot_answer = respXml.substring(respXml.indexOf("<message>")+9, respXml.indexOf("</message>"));
 
-                                    bot_answer = textBody.toString();
-                                    textBody.delete(0, textBody.length());
-                                    break;
-                                } else {
-                                    textBody.append(mas[i]);
-                                }
-                            }
-                        }
-                    }
-                    sb.delete(0, sb.length());
-                }
-                br.close();
-                BotTalking.this.runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        progress.dismiss();
-                    }
-                });
             } catch (MalformedURLException e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
@@ -347,7 +335,21 @@ public class BotTalking extends AppCompatActivity
                 // TODO Auto-generated catch block
                 e.printStackTrace();
             }
+
             return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            BotTalking.this.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    progress.dismiss();
+                }
+            });
+            chat.append("\nBot: "+bot_answer);
+            createVocalizer(Vocalizer.Language.RUSSIAN,bot_answer,true,Vocalizer.Voice.JANE).start();
         }
     }
 
