@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.vsquad.projects.govorillo">
+
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.INTERNET" />
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
+        <activity
+            android:name=".MainActivity"
+            android:label="@string/app_name"
+            android:theme="@style/AppTheme.NoActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".Results"
+            android:label="@string/title_activity_results"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".Partners"
+            android:label="@string/title_activity_partners"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".Trainer"
+            android:label="@string/title_activity_trainer"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".More"
+            android:label="@string/title_activity_more"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".RandomText"
+            android:label="@string/title_activity_random_text"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".Profile"
+            android:label="@string/title_activity_profile"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".PersonalText"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:label="@string/title_activity_personal_text"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:windowSoftInputMode="adjustPan|adjustResize|stateHidden" />
+        <activity
+            android:name=".FastTexts"
+            android:label="@string/title_activity_fast_texts"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".Modernize"
+            android:label="@string/title_activity_modernize"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".BotTalking"
+            android:label="@string/title_activity_bot_talking"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
+    </application>
+
+
+</manifest>

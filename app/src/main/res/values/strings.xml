@@ -1,0 +1,21 @@
+<resources>
+    <string name="app_name">Говорилло</string>
+    <integer name="com_vk_sdk_AppId">5882533</integer>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="action_settings">Настройки</string>
+    <string name="title_activity_results">Results</string>
+    <string name="_90_100">90/100</string>
+    <string name="iiii">iiii</string>
+    <string name="title_activity_partners">Partners</string>
+    <string name="title_activity_trainers">Trainers</string>
+    <string name="title_activity_trainer">Trainer</string>
+    <string name="title_activity_more">More</string>
+    <string name="title_activity_random_text">RandomText</string>
+    <string name="title_activity_profile">Profile</string>
+    <string name="title_activity_personal_text">PersonalText</string>
+    <string name="title_activity_fast_texts">FastTexts</string>
+    <string name="title_activity_modernize">Modernize</string>
+    <string name="title_activity_bot_talking">BotTalking</string>
+</resources>

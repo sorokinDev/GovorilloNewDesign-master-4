@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_camera"
+            android:title="Главная" />
+        <item
+            android:id="@+id/nav_random"
+            android:title="Случайная рубрика" />
+        <item
+            android:id="@+id/nav_personaltext"
+            android:title="Собственный текст" />
+        <item
+            android:id="@+id/nav_fast"
+            android:title="Скороговорки" />
+        <item
+            android:id="@+id/nav_modern"
+            android:title="Советы по улучшению речи" />
+        <item
+            android:id="@+id/nav_profile"
+            android:title="Профиль" />
+        <item
+            android:id="@+id/nav_partners"
+            android:title="Партнёры" />
+    </group>
+
+</menu>
